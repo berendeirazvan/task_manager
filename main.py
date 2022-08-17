@@ -35,7 +35,8 @@ while True:
         print("Name: " + str(process.name()))
         print("Percentage of CPU drained by the process: " + str(process.cpu_percent()/psutil.cpu_count()))
         print("Number of handles: " + str(process.num_handles()))
-        print("Working Set: " + str(process.memory_info().wset) + "\n" + "Private Bytes: " + str(process.memory_info().private))
+        print("Working Set: {0}\nPrivate Bytes: {1}".format(str(process.memory_info().wset),
+                                                            str(process.memory_info().private)))
         sleep(interval)
     except psutil.NoSuchProcess:
         print("Proccess exited.")
