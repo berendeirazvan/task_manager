@@ -1,7 +1,9 @@
 import subprocess
+import psutil
+import csv
 from time import sleep
 
-import psutil
+
 
 process = psutil.Process(subprocess.Popen("C:/Program Files/JetBrains/IntelliJ IDEA Community Edition 2022.2/bin/idea64.exe").pid)
 #process1 = psutil.Process(4)
@@ -16,8 +18,4 @@ while True:
     except psutil.NoSuchProcess:
         print("Proccess exited.")
         break
-
-
-
-
-# process.num_handles()
+        
