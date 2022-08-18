@@ -56,13 +56,15 @@ with open('C:/Temp/log.csv', 'w', newline='') as f:
                     runtime
                     ]
 
+            runtime += interval
             writer.writerow(data)
             sleep(interval)
-            runtime += interval
+
 
         except psutil.NoSuchProcess:
-            print("Proccess killed by user.")
             break
 
         except KeyboardInterrupt:
             process.kill()
+
+    print("Process killed.")
