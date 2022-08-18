@@ -3,7 +3,6 @@ import psutil
 import csv
 from time import sleep
 
-
 # declare process and interval variables and initialize them
 process = None
 interval = ""
@@ -30,14 +29,32 @@ while process is None:
         user_path = str(input("Choose the process (enter the full path): ").strip())
 
 
-while True:
-    try:
-        print("Name: " + str(process.name()))
-        print("Percentage of CPU drained by the process: " + str(process.cpu_percent()/psutil.cpu_count()))
-        print("Number of handles: " + str(process.num_handles()))
-        print("Working Set: {0}\nPrivate Bytes: {1}".format(str(process.memory_info().wset),
-                                                            str(process.memory_info().private)))
-        sleep(interval)
-    except psutil.NoSuchProcess:
-        print("Proccess exited.")
-        break
+with open('C:/Temp/log.csv', 'w', newline='') as f:
+    writer = csv.writer(f)
+
+    header = ['name', 'cpu_percent', 'num_handles', 'wset', 'private_bytes']
+
+    writer.writerow(header)
+    writer.writerow('')
+
+    while True:
+        try:
+            cpu_percent = round(process.cpu_percent() / float(psutil.cpu_count()), 2)
+            print("Name: " + str(process.name()))
+            print("Percentage of CPU drained by the process: " + str(cpu_percent))
+            print("Number of handles: " + str(process.num_handles()))
+            print("Working Set: {0}\n"
+                  "Private Bytes: {1}".format(str(process.memory_info().wset),
+                                              str(process.memory_info().private)))
+            data = [process.name(),
+                    cpu_percent,
+                    process.num_handles(),
+                    process.memory_info().wset,
+                    process.memory_info().private]
+
+            writer.writerow(data)
+            sleep(interval)
+
+        except psutil.NoSuchProcess:
+            print("Proccess exited.")
+            break
