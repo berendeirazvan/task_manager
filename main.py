@@ -38,7 +38,7 @@ with open('C:/Temp/log.csv', 'w', newline='') as f:
     writer.writerow('')
     runtime = 0
 
-# collect and write the data to the log.csv file until the process is exited by the user
+    # collect and write the data to the log.csv file until the process is exited by the user
     while process.is_running():
         try:
             cpu_percent = round(process.cpu_percent() / float(psutil.cpu_count()), 2)
@@ -59,7 +59,6 @@ with open('C:/Temp/log.csv', 'w', newline='') as f:
             runtime += interval
             writer.writerow(data)
             sleep(interval)
-
 
         except psutil.NoSuchProcess:
             break
