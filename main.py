@@ -13,7 +13,7 @@ user_path = str(input("Choose the process (enter the full path): ").strip())
 # initialize the analysis interval
 while interval is None:
     try:
-        interval = int(input("Choose the interval of analysis (Seconds): "))
+        interval = float(input("Choose the interval of analysis (Seconds): "))
     except ValueError:
         print("Warning: Invalid value for the interval, please enter a number.")
 
@@ -32,13 +32,14 @@ while process is None:
 with open('C:/Temp/log.csv', 'w', newline='') as f:
     writer = csv.writer(f)
 
-    header = ['name', 'cpu_percent', 'num_handles', 'wset (bytes) ', 'private_bytes']
+    header = ['name', 'cpu_percent', 'num_handles', 'wset (Bytes) ', 'private_bytes', 'runtime (Seconds)']
 
     writer.writerow(header)
     writer.writerow('')
+    runtime = 0
 
 # collect and write the data to the log.csv file until the process is exited by the user
-    while True:
+    while process.is_running():
         try:
             cpu_percent = round(process.cpu_percent() / float(psutil.cpu_count()), 2)
             print("Name: " + str(process.name()))
@@ -51,11 +52,17 @@ with open('C:/Temp/log.csv', 'w', newline='') as f:
                     cpu_percent,
                     process.num_handles(),
                     process.memory_info().wset,
-                    process.memory_info().private]
+                    process.memory_info().private,
+                    runtime
+                    ]
 
             writer.writerow(data)
             sleep(interval)
+            runtime += interval
 
         except psutil.NoSuchProcess:
-            print("Proccess exited.")
+            print("Proccess killed by user.")
             break
+
+        except KeyboardInterrupt:
+            process.kill()
