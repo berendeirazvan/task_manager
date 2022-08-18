@@ -32,7 +32,7 @@ while process is None:
 with open('C:/Temp/log.csv', 'w', newline='') as f:
     writer = csv.writer(f)
 
-    header = ['name', 'cpu_percent', 'num_handles', 'wset', 'private_bytes']
+    header = ['name', 'cpu_percent', 'num_handles', 'wset (bytes) ', 'private_bytes']
 
     writer.writerow(header)
     writer.writerow('')
