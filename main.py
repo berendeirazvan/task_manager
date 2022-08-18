@@ -5,13 +5,13 @@ from time import sleep
 
 # declare process and interval variables and initialize them
 process = None
-interval = ""
+interval = None
 
 # initialize the user path
 user_path = str(input("Choose the process (enter the full path): ").strip())
 
 # initialize the analysis interval
-while interval == "":
+while interval is None:
     try:
         interval = int(input("Choose the interval of analysis (Seconds): "))
     except ValueError:
@@ -28,7 +28,7 @@ while process is None:
         print("Warning: OSError encountered.")
         user_path = str(input("Choose the process (enter the full path): ").strip())
 
-
+# open the log.csv for writing
 with open('C:/Temp/log.csv', 'w', newline='') as f:
     writer = csv.writer(f)
 
@@ -37,6 +37,7 @@ with open('C:/Temp/log.csv', 'w', newline='') as f:
     writer.writerow(header)
     writer.writerow('')
 
+# collect and write the data to the log.csv file until the process is exited by the user
     while True:
         try:
             cpu_percent = round(process.cpu_percent() / float(psutil.cpu_count()), 2)
