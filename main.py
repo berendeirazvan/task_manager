@@ -1,6 +1,9 @@
+import signal
 import subprocess
 import psutil
 import csv
+import signal
+import os
 from time import sleep
 
 # declare process and interval variables and initialize them
@@ -29,30 +32,33 @@ while process is None:
         user_path = str(input("Choose the process (enter the full path): ").strip())
 
 # open the log.csv for writing
-with open('C:/Temp/log.csv', 'w', newline='') as f:
+with open('/home/rberendei/Documents/log.csv', 'w', newline='') as f:
     writer = csv.writer(f)
 
-    header = ['name', 'cpu_percent', 'num_handles', 'wset (Bytes) ', 'private_bytes', 'runtime (Seconds)']
+    header = ['name', 'cpu_percent', 'num_fds', 'rss (Bytes) ', 'vms (Bytes)', 'runtime (Seconds)']
 
     writer.writerow(header)
     writer.writerow('')
     runtime = 0
 
     # collect and write the data to the log.csv file until the process is exited by the user
-    while process.is_running():
+    while process.status() != "zombie":
         try:
             cpu_percent = round(process.cpu_percent() / float(psutil.cpu_count()), 2)
             print("Name: " + str(process.name()))
             print("Percentage of CPU drained by the process: " + str(cpu_percent))
-            print("Number of handles: " + str(process.num_handles()))
-            print("Working Set: {0}\n"
-                  "Private Bytes: {1}".format(str(process.memory_info().wset),
-                                              str(process.memory_info().private)))
+            print("Number of files open: " + str(process.num_fds()))
+            print("Resident Set Size: {0}\n"
+                  "Virtual Memory Size: {1}".format(str(process.memory_info().rss),
+                                                    str(process.memory_info().vms)))
+            print("PID: " + str(process.pid))
+            print("Process status: " + str(process.status()))
+
             data = [process.name(),
                     cpu_percent,
-                    process.num_handles(),
-                    process.memory_info().wset,
-                    process.memory_info().private,
+                    process.num_fds(),
+                    process.memory_info().rss,
+                    process.memory_info().vms,
                     runtime
                     ]
 
@@ -60,10 +66,8 @@ with open('C:/Temp/log.csv', 'w', newline='') as f:
             writer.writerow(data)
             sleep(interval)
 
-        except psutil.NoSuchProcess:
+        except KeyboardInterrupt:
+            print("Interrupted by keyboard")
             break
 
-        except KeyboardInterrupt:
-            process.kill()
-
-    print("Process killed.")
+print("Process killed.")
