@@ -32,7 +32,7 @@ while process is None:
         user_path = str(input("Choose the process (enter the full path): ").strip())
 
 # open the log.csv for writing
-with open('/home/rberendei/Documents/log.csv', 'w', newline='') as f:
+with open('/tmp/log.csv', 'w', newline='') as f:
     writer = csv.writer(f)
 
     header = ['name', 'cpu_percent', 'num_fds', 'rss (Bytes) ', 'vms (Bytes)', 'runtime (Seconds)']
