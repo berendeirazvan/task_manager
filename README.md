@@ -19,4 +19,4 @@ Notes:
 another path for the process if 
 the access is denied or the path is incorrect
 - there is also a Linux version 
-of this application located on the Linux branch
+of this application located on the linux branch
