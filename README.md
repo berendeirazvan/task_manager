@@ -2,6 +2,11 @@
 
 --- task manager like project ---
 
+This application collects CPU, memory and 
+open handles/file descriptors information
+after a user determined interval and stores
+the collected information into a .csv file.
+
 The script starts a process determined by
 the user by entering the full path. After that,
 the user is prompted to enter the interval in seconds
